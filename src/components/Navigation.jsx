@@ -31,7 +31,7 @@ const Navigation = ({ onSelect }) => {
     return (
         <div className="p-4 max-w-md mx-auto h-full flex flex-col">
             <div className="flex justify-center items-center mb-8 bg-white p-4 rounded-2xl shadow-lg">
-                <h1 className="text-2xl font-bold text-gray-700">הכנה למבחן באנגלית</h1>
+                <h1 className="text-2xl font-bold text-gray-700">הכנה למבחן באנגלית ג׳ 2</h1>
             </div>
 
             <motion.div
@@ -47,7 +47,7 @@ const Navigation = ({ onSelect }) => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => onSelect(item.id)}
-                        className={`${item.color} p-6 rounded-2xl shadow-md flex flex-col items-center justify-center gap-3 text-white aspect-square`}
+                        className={`${item.color} p-4 rounded-2xl shadow-md flex flex-col items-center justify-center gap-2 text-white`}
                     >
                         <item.icon size={32} />
                         <span className="font-bold text-lg">{item.label}</span>
