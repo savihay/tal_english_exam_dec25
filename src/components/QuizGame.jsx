@@ -56,7 +56,7 @@ const QuizGame = ({ type }) => {
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 key={current.eng || current.text}
-                className="w-full bg-white rounded-3xl shadow-xl p-8 mb-8 text-center"
+                className={`w-full rounded-3xl shadow-xl p-8 mb-8 text-center ${type === 'reading' ? 'bg-blue-100' : 'bg-white'}`}
             >
                 {type === 'vocab' && (
                     <button
