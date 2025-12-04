@@ -10,13 +10,10 @@ import QuizGame from './components/QuizGame';
 import NamePractice from './components/NamePractice';
 
 function App() {
-    const [score, setScore] = useState(0);
     const navigate = useNavigate();
     const location = useLocation();
 
-    const handleScore = (points) => {
-        setScore(s => s + points);
-    };
+
 
     const isHome = location.pathname === '/';
 
@@ -31,22 +28,18 @@ function App() {
                     >
                         <Home size={24} />
                     </button>
-                    <div className="flex items-center gap-2">
-                        <Star className="text-yellow-500 fill-yellow-500" size={20} />
-                        <span className="font-bold text-lg">{score}</span>
-                    </div>
                 </div>
             )}
 
             <div className="flex-1 relative overflow-hidden">
                 <Routes>
-                    <Route path="/" element={<Navigation onSelect={(id) => navigate(`/${id}`)} score={score} />} />
-                    <Route path="/letters" element={<LettersGame onScore={handleScore} />} />
-                    <Route path="/colors" element={<FloatingGame type="colors" items={DATA.colors} onScore={handleScore} />} />
-                    <Route path="/numbers" element={<FloatingGame type="numbers" items={DATA.numbers} onScore={handleScore} />} />
-                    <Route path="/cognates" element={<CognateGame onScore={handleScore} />} />
-                    <Route path="/vocab" element={<QuizGame type="vocab" onScore={handleScore} />} />
-                    <Route path="/reading" element={<QuizGame type="reading" onScore={handleScore} />} />
+                    <Route path="/" element={<Navigation onSelect={(id) => navigate(`/${id}`)} />} />
+                    <Route path="/letters" element={<LettersGame />} />
+                    <Route path="/colors" element={<FloatingGame type="colors" items={DATA.colors} />} />
+                    <Route path="/numbers" element={<FloatingGame type="numbers" items={DATA.numbers} />} />
+                    <Route path="/cognates" element={<CognateGame />} />
+                    <Route path="/vocab" element={<QuizGame type="vocab" />} />
+                    <Route path="/reading" element={<QuizGame type="reading" />} />
                     <Route path="/name" element={<NamePractice />} />
                 </Routes>
             </div>

@@ -4,7 +4,7 @@ import { Volume2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { DATA } from '../data/content';
 
-const QuizGame = ({ type, onScore }) => {
+const QuizGame = ({ type }) => {
     const [index, setIndex] = useState(0);
     const [shuffledOptions, setShuffledOptions] = useState([]);
     const [feedback, setFeedback] = useState(null);
@@ -32,7 +32,6 @@ const QuizGame = ({ type, onScore }) => {
     const handleAnswer = (ans) => {
         if (ans === current.heb) {
             setFeedback('correct');
-            onScore(1);
             confetti({
                 particleCount: 50,
                 spread: 60,

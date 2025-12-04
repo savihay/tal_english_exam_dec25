@@ -5,8 +5,8 @@ import confetti from 'canvas-confetti';
 import { DATA } from '../data/content';
 import { useGameLogic } from '../hooks/useGameLogic';
 
-const LettersGame = ({ onScore }) => {
-    const { feedback, mistakes, speak, handleAnswer } = useGameLogic(onScore);
+const LettersGame = () => {
+    const { feedback, mistakes, speak, handleAnswer } = useGameLogic();
     const [target, setTarget] = useState(null);
     const [options, setOptions] = useState([]);
 

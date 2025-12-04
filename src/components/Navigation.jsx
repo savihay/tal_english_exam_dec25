@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Star, Palette, Hash, Languages, BookOpen, User, Type } from 'lucide-react';
 
-const Navigation = ({ onSelect, score }) => {
+const Navigation = ({ onSelect }) => {
     const menuItems = [
         { id: 'letters', label: 'אותיות', icon: Type, color: 'bg-red-400' },
         { id: 'colors', label: 'צבעים', icon: Palette, color: 'bg-blue-400' },
@@ -30,12 +30,8 @@ const Navigation = ({ onSelect, score }) => {
 
     return (
         <div className="p-4 max-w-md mx-auto h-full flex flex-col">
-            <div className="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-lg">
+            <div className="flex justify-center items-center mb-8 bg-white p-4 rounded-2xl shadow-lg">
                 <h1 className="text-2xl font-bold text-gray-700">הכנה למבחן באנגלית</h1>
-                <div className="flex items-center gap-2 bg-yellow-100 px-3 py-1 rounded-full">
-                    <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-                    <span className="font-bold text-yellow-700">{score}</span>
-                </div>
             </div>
 
             <motion.div

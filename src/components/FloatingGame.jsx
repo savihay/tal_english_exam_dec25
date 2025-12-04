@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-const FloatingGame = ({ type, items, onScore }) => {
+const FloatingGame = ({ type, items }) => {
     const [targets, setTargets] = useState([]);
     const [currentPrompt, setCurrentPrompt] = useState(null);
     const [gameActive, setGameActive] = useState(false);
@@ -113,7 +113,6 @@ const FloatingGame = ({ type, items, onScore }) => {
 
         if (isMatch) {
             playSuccess();
-            onScore(1);
             setTargets(prev => prev.filter(t => t.id !== target.id));
             confetti({
                 particleCount: 30,

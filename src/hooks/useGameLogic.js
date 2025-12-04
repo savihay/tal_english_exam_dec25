@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import confetti from 'canvas-confetti';
 
-export const useGameLogic = (onScore) => {
+export const useGameLogic = () => {
     const [feedback, setFeedback] = useState(null);
     const [mistakes, setMistakes] = useState(0);
 
@@ -21,7 +21,6 @@ export const useGameLogic = (onScore) => {
     const handleAnswer = useCallback((selectedId, targetId, nextRoundCallback) => {
         if (selectedId === targetId) {
             setFeedback('correct');
-            onScore(1);
             confetti({
                 particleCount: 50,
                 spread: 60,
@@ -45,7 +44,7 @@ export const useGameLogic = (onScore) => {
                 }, 2000);
             }
         }
-    }, [mistakes, onScore, speak, resetRound]);
+    }, [mistakes, speak, resetRound]);
 
     return {
         feedback,
