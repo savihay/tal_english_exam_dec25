@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Home, Star } from 'lucide-react';
 import { DATA } from './data/content';
 import Navigation from './components/Navigation';
@@ -9,33 +10,23 @@ import QuizGame from './components/QuizGame';
 import NamePractice from './components/NamePractice';
 
 function App() {
-    const [view, setView] = useState('home');
     const [score, setScore] = useState(0);
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const handleScore = (points) => {
         setScore(s => s + points);
     };
 
-    const renderView = () => {
-        switch (view) {
-            case 'letters': return <LettersGame onScore={handleScore} />;
-            case 'colors': return <FloatingGame type="colors" items={DATA.colors} onScore={handleScore} />;
-            case 'numbers': return <FloatingGame type="numbers" items={DATA.numbers} onScore={handleScore} />;
-            case 'cognates': return <CognateGame onScore={handleScore} />;
-            case 'vocab': return <QuizGame type="vocab" onScore={handleScore} />;
-            case 'reading': return <QuizGame type="reading" onScore={handleScore} />;
-            case 'name': return <NamePractice />;
-            default: return <Navigation onSelect={setView} score={score} />;
-        }
-    };
+    const isHome = location.pathname === '/';
 
     return (
         <div className="h-[100dvh] w-full flex flex-col bg-slate-50 overflow-hidden">
             {/* Header */}
-            {view !== 'home' && (
+            {!isHome && (
                 <div className="p-4 flex justify-between items-center bg-white shadow-sm z-20">
                     <button
-                        onClick={() => setView('home')}
+                        onClick={() => navigate('/')}
                         className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition"
                     >
                         <Home size={24} />
@@ -48,7 +39,16 @@ function App() {
             )}
 
             <div className="flex-1 relative overflow-hidden">
-                {renderView()}
+                <Routes>
+                    <Route path="/" element={<Navigation onSelect={(id) => navigate(`/${id}`)} score={score} />} />
+                    <Route path="/letters" element={<LettersGame onScore={handleScore} />} />
+                    <Route path="/colors" element={<FloatingGame type="colors" items={DATA.colors} onScore={handleScore} />} />
+                    <Route path="/numbers" element={<FloatingGame type="numbers" items={DATA.numbers} onScore={handleScore} />} />
+                    <Route path="/cognates" element={<CognateGame onScore={handleScore} />} />
+                    <Route path="/vocab" element={<QuizGame type="vocab" onScore={handleScore} />} />
+                    <Route path="/reading" element={<QuizGame type="reading" onScore={handleScore} />} />
+                    <Route path="/name" element={<NamePractice />} />
+                </Routes>
             </div>
         </div>
     );
