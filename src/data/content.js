@@ -13,11 +13,11 @@ export const DATA = {
         { name: 'Yellow', hex: '#FFD740' },
         { name: 'Green', hex: '#69F0AE' },
         { name: 'Gray', hex: '#9E9E9E' },
-        { name: 'Pink', hex: '#FF69B4' },
+        { name: 'Pink', hex: '#FFB6D9' },
         { name: 'Purple', hex: '#E040FB' },
         { name: 'White', hex: '#FFFFFF' },
         { name: 'Brown', hex: '#8D6E63' },
-        { name: 'Orange', hex: '#FFAB40' }
+        { name: 'Orange', hex: '#FF8C00' }
     ],
     numbers: Array.from({ length: 13 }, (_, i) => ({ val: i, text: i.toString() })),
     cognates: [

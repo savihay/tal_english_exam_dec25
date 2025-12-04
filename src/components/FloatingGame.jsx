@@ -60,6 +60,34 @@ const FloatingGame = ({ type, items, onScore }) => {
     useEffect(() => {
         if (!currentPrompt) return;
 
+        const spawnTarget = () => {
+            // Weighted random: 40% chance to spawn the target, 60% random distractor
+            let item;
+            if (Math.random() < 0.4) {
+                // 40% chance: spawn the target
+                item = currentPrompt;
+            } else {
+                // 60% chance: spawn random distractor
+                item = items[Math.floor(Math.random() * items.length)];
+            }
+
+            const id = Date.now() + Math.random();
+            // Ensure it spawns within width minus item width (approx 80px)
+            const startX = Math.random() * (window.innerWidth - 100) + 10;
+
+            setTargets(prev => [...prev, {
+                id,
+                item,
+                x: startX,
+                duration: 5 + Math.random() * 1 // Slower: 5-6 seconds
+            }]);
+
+            // Cleanup old targets
+            setTimeout(() => {
+                setTargets(prev => prev.filter(t => t.id !== id));
+            }, 7000);
+        };
+
         // Spawn first target immediately
         spawnTarget();
 
@@ -76,34 +104,6 @@ const FloatingGame = ({ type, items, onScore }) => {
         const randomItem = items[Math.floor(Math.random() * items.length)];
         setCurrentPrompt(randomItem);
         speak(type === 'colors' ? randomItem.name : randomItem.text);
-    };
-
-    const spawnTarget = () => {
-        // Weighted random: 90% chance to spawn the target, 10% random distractor
-        let item;
-        if (Math.random() < 0.9 && currentPrompt) {
-            // 90% chance: spawn the target
-            item = currentPrompt;
-        } else {
-            // 10% chance: spawn random distractor
-            item = items[Math.floor(Math.random() * items.length)];
-        }
-
-        const id = Date.now() + Math.random();
-        // Ensure it spawns within width minus item width (approx 80px)
-        const startX = Math.random() * (window.innerWidth - 100) + 10;
-
-        setTargets(prev => [...prev, {
-            id,
-            item,
-            x: startX,
-            duration: 5 + Math.random() * 1 // Slower: 5-6 seconds
-        }]);
-
-        // Cleanup old targets
-        setTimeout(() => {
-            setTargets(prev => prev.filter(t => t.id !== id));
-        }, 7000);
     };
 
     const handleTap = (target) => {
@@ -156,16 +156,27 @@ const FloatingGame = ({ type, items, onScore }) => {
                         }}
                         onClick={() => handleTap(t)}
                         whileTap={{ scale: 0.9 }}
-                        className={`absolute cursor-pointer flex items-center justify-center shadow-lg z-10
+                        className={`absolute cursor-pointer flex items-center justify-center z-10
                             ${type === 'colors' ? 'w-24 h-28 rounded-[50%]' : 'w-20 h-20 rounded-full bg-white/40 border-2 border-white/80 backdrop-blur-sm'}`}
                         style={{
                             backgroundColor: type === 'colors' ? t.item.hex : undefined,
-                            border: type === 'colors' && t.item.name === 'White' ? '1px solid #ddd' : undefined,
-                            left: 0 // Position controlled by motion x
+                            border: type === 'colors' && t.item.name === 'White' ? '2px solid #ddd' : undefined,
+                            left: 0, // Position controlled by motion x
+                            boxShadow: type === 'colors' 
+                                ? '0 8px 16px rgba(0,0,0,0.15), inset -8px -8px 16px rgba(0,0,0,0.1), inset 8px 8px 16px rgba(255,255,255,0.3)' 
+                                : undefined,
+                            background: type === 'colors' 
+                                ? `radial-gradient(circle at 30% 30%, ${t.item.hex}dd, ${t.item.hex})` 
+                                : undefined
                         }}
                     >
                         {type === 'colors' && (
-                            <div className="absolute bottom-[-10px] left-1/2 w-0.5 h-5 bg-black/20 -translate-x-1/2" />
+                            <>
+                                {/* Glossy highlight */}
+                                <div className="absolute top-[15%] left-[25%] w-[30%] h-[25%] rounded-full bg-white/40 blur-sm" />
+                                {/* Balloon string */}
+                                <div className="absolute bottom-[-12px] left-1/2 w-0.5 h-6 bg-gradient-to-b from-black/30 to-black/10 -translate-x-1/2" />
+                            </>
                         )}
                         {type === 'numbers' && (
                             <span className="text-3xl font-bold text-gray-800">{t.item.text}</span>
