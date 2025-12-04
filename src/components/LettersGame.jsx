@@ -3,12 +3,12 @@ import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { DATA } from '../data/content';
+import { useGameLogic } from '../hooks/useGameLogic';
 
 const LettersGame = ({ onScore }) => {
+    const { feedback, mistakes, speak, handleAnswer } = useGameLogic(onScore);
     const [target, setTarget] = useState(null);
     const [options, setOptions] = useState([]);
-    const [feedback, setFeedback] = useState(null);
-    const [mistakes, setMistakes] = useState(0);
 
     // Phonetic names to avoid TTS saying "Capital A"
     const phoneticNames = {
@@ -22,14 +22,6 @@ const LettersGame = ({ onScore }) => {
     useEffect(() => {
         nextRound();
     }, []);
-
-    const speak = (text) => {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        const isHebrew = /[\u0590-\u05FF]/.test(text);
-        utterance.lang = isHebrew ? 'he-IL' : 'en-US';
-        window.speechSynthesis.speak(utterance);
-    };
 
     const nextRound = () => {
         const t = DATA.letters[Math.floor(Math.random() * DATA.letters.length)];
@@ -56,36 +48,9 @@ const LettersGame = ({ onScore }) => {
         }).sort(() => Math.random() - 0.5);
 
         setOptions(opts);
-        setFeedback(null);
-        setMistakes(0); // Reset mistakes for new round
 
         // Speak phonetic name
         setTimeout(() => speak(phoneticNames[targetLetter]), 500);
-    };
-
-    const handleAnswer = (selected) => {
-        if (selected.letter === target.letter) {
-            setFeedback('correct');
-            onScore(1);
-            confetti({
-                particleCount: 50,
-                spread: 60,
-                origin: { y: 0.7 }
-            });
-            setTimeout(nextRound, 1000);
-        } else {
-            const newMistakes = mistakes + 1;
-            setMistakes(newMistakes);
-
-            if (newMistakes === 1) {
-                // First mistake: just say try again, don't mark anything
-                speak("תנסו שוב");
-            } else {
-                // Second mistake: reveal the answer
-                setFeedback('reveal');
-                setTimeout(nextRound, 2000);
-            }
-        }
     };
 
     return (
@@ -113,13 +78,12 @@ const LettersGame = ({ onScore }) => {
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: i * 0.1 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => handleAnswer(opt)}
+                        onClick={() => handleAnswer(opt.letter, target.letter, nextRound)}
                         disabled={feedback === 'correct' || feedback === 'reveal'}
                         className={`aspect-square rounded-2xl text-5xl font-bold shadow-md flex items-center justify-center transition
-                            ${feedback === 'correct' && opt.letter === target.letter ? 'bg-green-500 text-white' :
-                                feedback === 'reveal' && opt.letter === target.letter ? 'bg-green-500 text-white' :
-                                    feedback === 'reveal' && opt.letter !== target.letter ? 'bg-red-400 text-white' :
-                                        'bg-white text-gray-700 hover:bg-gray-50'}`}
+                            ${(feedback === 'correct' || feedback === 'reveal') && opt.letter === target.letter ? 'bg-green-500 text-white' :
+                                feedback === 'reveal' && opt.letter !== target.letter ? 'bg-red-400 text-white' :
+                                    'bg-white text-gray-700 hover:bg-gray-50'}`}
                     >
                         {opt.display}
                     </motion.button>
