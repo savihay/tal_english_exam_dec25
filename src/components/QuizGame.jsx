@@ -5,12 +5,18 @@ import confetti from 'canvas-confetti';
 import { DATA } from '../data/content';
 
 const QuizGame = ({ type }) => {
+    const [questions, setQuestions] = useState([]);
     const [index, setIndex] = useState(0);
     const [shuffledOptions, setShuffledOptions] = useState([]);
     const [feedback, setFeedback] = useState(null);
 
-    const items = type === 'vocab' ? DATA.vocab : DATA.reading;
-    const current = items[index];
+    useEffect(() => {
+        const rawItems = type === 'vocab' ? DATA.vocab : DATA.reading;
+        setQuestions([...rawItems].sort(() => Math.random() - 0.5));
+        setIndex(0);
+    }, [type]);
+
+    const current = questions[index];
 
     useEffect(() => {
         if (!current) return;
@@ -19,7 +25,7 @@ const QuizGame = ({ type }) => {
         setShuffledOptions(opts);
         setFeedback(null);
         if (type === 'vocab') setTimeout(() => speak(current.eng), 500);
-    }, [index, type]);
+    }, [current, type]);
 
     const speak = (text) => {
         window.speechSynthesis.cancel();
@@ -38,10 +44,13 @@ const QuizGame = ({ type }) => {
                 origin: { y: 0.7 }
             });
             setTimeout(() => {
-                if (index < items.length - 1) {
+                if (index < questions.length - 1) {
                     setIndex(i => i + 1);
                 } else {
-                    setIndex(0); // Loop
+                    // Loop and reshuffle
+                    const rawItems = type === 'vocab' ? DATA.vocab : DATA.reading;
+                    setQuestions([...rawItems].sort(() => Math.random() - 0.5));
+                    setIndex(0);
                 }
             }, 1000);
         } else {
@@ -49,6 +58,8 @@ const QuizGame = ({ type }) => {
             speak("תנסו שוב");
         }
     };
+
+    if (!current) return null;
 
     return (
         <div className="h-full flex flex-col items-center justify-center p-6 max-w-md mx-auto">
