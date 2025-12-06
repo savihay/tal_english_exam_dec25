@@ -7,6 +7,7 @@ import FloatingGame from './components/FloatingGame';
 import CognateGame from './components/CognateGame';
 import LettersGame from './components/LettersGame';
 import QuizGame from './components/QuizGame';
+import NumbersGame from './components/NumbersGame';
 import NamePractice from './components/NamePractice';
 
 function App() {
@@ -36,7 +37,7 @@ function App() {
                     <Route path="/" element={<Navigation onSelect={(id) => navigate(`/${id}`)} />} />
                     <Route path="/letters" element={<LettersGame />} />
                     <Route path="/colors" element={<FloatingGame type="colors" items={DATA.colors} />} />
-                    <Route path="/numbers" element={<FloatingGame type="numbers" items={DATA.numbers} />} />
+                    <Route path="/numbers" element={<NumbersGame />} />
                     <Route path="/cognates" element={<CognateGame />} />
                     <Route path="/vocab" element={<QuizGame type="vocab" />} />
                     <Route path="/reading" element={<QuizGame type="reading" />} />
