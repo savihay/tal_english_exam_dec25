@@ -79,7 +79,10 @@ const FloatingGame = ({ type, items }) => {
                 id,
                 item,
                 x: startX,
-                duration: 5 + Math.random() * 1 // Slower: 5-6 seconds
+                // Calculate duration based on screen height to ensure consistent speed
+                // Distance to travel is approx 1.2 * height (100vh start to -20vh end)
+                // We want a constant speed of approx 150 pixels per second
+                duration: ((window.innerHeight * 1.2) / 150) + Math.random() // Base duration + 0-1s random
             }]);
 
             // Cleanup old targets

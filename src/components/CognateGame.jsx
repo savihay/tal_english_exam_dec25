@@ -8,6 +8,7 @@ import { useGameLogic } from '../hooks/useGameLogic';
 const CognateGame = () => {
     const { feedback, mistakes, speak, handleAnswer } = useGameLogic();
     const [target, setTarget] = useState(null);
+    const [options, setOptions] = useState([]);
 
     useEffect(() => {
         nextRound();
@@ -16,6 +17,11 @@ const CognateGame = () => {
     const nextRound = () => {
         const t = DATA.cognates[Math.floor(Math.random() * DATA.cognates.length)];
         setTarget(t);
+        
+        // Shuffle options
+        const shuffled = [...DATA.cognates].sort(() => Math.random() - 0.5);
+        setOptions(shuffled);
+        
         setTimeout(() => speak(t.name), 500);
     };
 
@@ -32,7 +38,7 @@ const CognateGame = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4 w-full max-w-md overflow-y-auto pb-20">
-                {DATA.cognates.map(item => (
+                {options.map(item => (
                     <motion.button
                         key={item.id}
                         initial={{ scale: 0.9, opacity: 0 }}
